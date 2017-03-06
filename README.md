@@ -992,45 +992,51 @@ Wikipedia says
 **Programmatic example**
 Translating our tea example from above. First of all we have tea types and tea maker
 
-```php
+```csharp
 // Anything that will be cached is flyweight. 
 // Types of tea here will be flyweights.
-class KarakTea {
+class KarakTea
+{
 }
 
 // Acts as a factory and saves the tea
-class TeaMaker {
-    protected $availableTea = [];
+class TeaMaker
+{
+    protected List<KarakTea> AvailableTea = new List<KarakTea>();
 
-    public function make($preference) {
-        if (empty($this->availableTea[$preference])) {
-            $this->availableTea[$preference] = new KarakTea();
+    public KarakTea Make(int preference)
+    {
+        if (!AvailableTea.Contains(preference))
+	{
+            AvailableTea[preference] = new KarakTea();
         }
 
-        return $this->availableTea[$preference];
+        return availableTea[preference];
     }
 }
 ```
-
 Then we have the `TeaShop` which takes orders and serves them
+```csharp
+class TeaShop
+{    
+    protected Orders;
+    protected TeaMaker TeaMaker;
 
-```php
-class TeaShop {
-    
-    protected $orders;
-    protected $teaMaker;
-
-    public function __construct(TeaMaker $teaMaker) {
-        $this->teaMaker = $teaMaker;
+    public TeaShop(TeaMaker teaMaker)
+	{
+        TeaMaker = teaMaker;
     }
 
-    public function takeOrder(string $teaType, int $table) {
-        $this->orders[$table] = $this->teaMaker->make($teaType);
+    public void TakeOrder(string teaType, int table)
+	{
+        Orders[table] = TeaMaker.Make(teaType);
     }
 
-    public function serve() {
-        foreach($this->orders as $table => $tea) {
-            echo "Serving tea to table# " . $table;
+    public void Serve()
+	{
+        foreach(var tea in Orders as $table => $tea)
+		{
+            Console.WriteLine("Serving tea to table# " + table);
         }
     }
 }
