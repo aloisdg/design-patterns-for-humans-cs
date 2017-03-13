@@ -1002,16 +1002,16 @@ class KarakTea
 // Acts as a factory and saves the tea
 class TeaMaker
 {
-    protected List<KarakTea> AvailableTea = new List<KarakTea>();
+    protected Dictionary<string, KarakTea> AvailableTea = new Dictionary<string, KarakTea>();
 
-    public KarakTea Make(int preference)
+    public KarakTea Make(string preference)
     {
-        if (!AvailableTea.Contains(preference))
+        if (!AvailableTea.Keys.Contains(preference))
 	{
-            AvailableTea[preference] = new KarakTea();
+            AvailableTea.Add(preference, new KarakTea());
         }
 
-        return availableTea[preference];
+        return AvailableTea[preference];
     }
 }
 ```
@@ -1019,23 +1019,23 @@ Then we have the `TeaShop` which takes orders and serves them
 ```csharp
 class TeaShop
 {    
-    protected Orders;
+    protected Dictionary<int, KarakTea> Orders = new Dictionary<int, KarakTea>();
     protected TeaMaker TeaMaker;
 
     public TeaShop(TeaMaker teaMaker)
-	{
+    {
         TeaMaker = teaMaker;
     }
 
     public void TakeOrder(string teaType, int table)
-	{
+    {
         Orders[table] = TeaMaker.Make(teaType);
     }
 
     public void Serve()
-	{
-        foreach(var tea in Orders as $table => $tea)
-		{
+    {
+        foreach(var table in Orders.Select(order => order.Key))
+        {
             Console.WriteLine("Serving tea to table# " + table);
         }
     }
@@ -1043,15 +1043,15 @@ class TeaShop
 ```
 And it can be used as below
 
-```php
-$teaMaker = new TeaMaker();
-$shop = new TeaShop($teaMaker);
+```csharp
+var teaMaker = new TeaMaker();
+var shop = new TeaShop(teaMaker);
 
-$shop->takeOrder('less sugar', 1);
-$shop->takeOrder('more milk', 2);
-$shop->takeOrder('without sugar', 5);
+shop.TakeOrder("less sugar", 1);
+shop.TakeOrder("more milk", 2);
+shop.TakeOrder("without sugar", 5);
 
-$shop->serve();
+shop.Serve();
 // Serving tea to table# 1
 // Serving tea to table# 2
 // Serving tea to table# 5
