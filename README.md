@@ -1071,19 +1071,23 @@ Wikipedia says
 **Programmatic Example**
 Taking our security door example from above. Firstly we have the door interface and an implementation of door
 
-```php
-interface Door {
-    public function open();
-    public function close();
+```csharp
+interface IDoor
+{
+    void Open();
+    void Close();
 }
 
-class LabDoor implements Door {
-    public function open() {
-        echo "Opening lab door";
+class LabDoor : IDoor
+{
+    public void Open()
+	{
+        Console.WriteLine("Opening lab door");
     }
 
-    public function close() {
-        echo "Closing the lab door";
+    public void Close()
+	{
+        Console.WriteLine("Closing the lab door");
     }
 }
 ```
