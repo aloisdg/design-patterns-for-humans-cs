@@ -1172,26 +1172,15 @@ Wikipedia says
 Translating our account example above. First of all we have a base account having the logic for chaining the accounts together and some accounts
 
 ```c#
-    /// <summary>
-    /// Base class for all accounts.
-    /// </summary>
     abstract class Account
     {
         protected float _balance;
-
-        /// <summary>
-        /// Base class constructor used to initialize account balance.
-        /// </summary>
-        /// <param name="balance"></param>
+	
         public Account(float balance)
         {
             _balance = balance;
         }
 
-        /// <summary>
-        /// Perform pay operation using one of the accounts.
-        /// </summary>
-        /// <param name="amountToPay">Amount required to pay.</param>
         public void Pay(float amountToPay)
         {
             // Check if current acount have enough money to pay.
@@ -1211,20 +1200,12 @@ Translating our account example above. First of all we have a base account havin
                 throw new InvalidOperationException("None of the accounts have enough balance!");
             }
         }
-
-        /// <summary>
-        /// Check if current account have enough money.
-        /// </summary>
-        /// <param name="amountRequired">The amount required to pay.</param>
-        /// <returns>Return true if this account have enough money otherwise false.</returns>
+	
         protected bool CanPay(float amountRequired)
         {
             return _balance >= amountRequired;
         }
 
-        /// <summary>
-        /// Get or set successor account.
-        /// </summary>
         public Account SuccessorSuccessorSuccessor { get; set; }
     }
 
