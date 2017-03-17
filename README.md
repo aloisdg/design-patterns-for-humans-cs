@@ -1294,7 +1294,7 @@ interface ICommand
 // Command
 class TurnOn : ICommand
 {
-    protected readonly Bulb bulb;
+    protected readonly Bulb _bulb;
     
     public TurnOn(Bulb bulb)
     {
@@ -1319,7 +1319,7 @@ class TurnOn : ICommand
 
 class TurnOff : ICommand
 {
-    protected readonly Blub _blub;
+    protected readonly Bulb _blub;
     
     public TurnOff(Bulb bulb)
     {
@@ -1361,8 +1361,8 @@ var turnOn = new TurnOn(bulb);
 var turnOff = new TurnOff(bulb);
 
 var remote = new RemoteControl();
-var remoteControl.Submit(turnOn); // Bulb has been lit!
-var remoteControl.Submit(turnOff); // Darkness!
+remote.Submit(turnOn); // Bulb has been lit!
+remote.Submit(turnOff); // Darkness!
 ```
 
 Command pattern can also be used to implement a transaction based system. Where you keep maintaining the history of commands as soon as you execute them. If the final command is successfully executed, all good otherwise just iterate through the history and keep executing the `undo` on all the executed commands. 
