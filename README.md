@@ -1171,80 +1171,83 @@ Wikipedia says
 
 Translating our account example above. First of all we have a base account having the logic for chaining the accounts together and some accounts
 
-```php
-abstract class Account {
-    protected $successor;
-    protected $balance;
+```c#
+abstract class Account
+{
+    protected float _balance;
+    public Account Successor { get; set; }
 
-    public function setNext(Account $account) {
-        $this->successor = $account;
+    public Account(float balance)
+    {
+        _balance = balance;
     }
-    
-    public function pay(float $amountToPay) {
-        if ($this->canPay($amountToPay)) {
-            echo sprintf('Paid %s using %s' . PHP_EOL, $amount, get_called_class());
-        } else if ($this->successor) {
-            echo sprintf('Cannot pay using %s. Proceeding ..' . PHP_EOL, get_called_class());
-            $this->successor->pay($amountToPay);
-        } else {
-            throw Exception('None of the accounts have enough balance');
+
+    public void Pay(float amountToPay)
+    {
+        // Check if current acount have enough money to pay.
+        if (CanPay(amountToPay))
+        {
+            Console.WriteLine($"Paid {amountToPay} using {GetType().Name}!");
+        }
+        else if (Successor != null)
+        {
+            Console.WriteLine($"Cannot pay using {GetType().Name}. Proceeding ..");
+            // If current account have a successor account try paying using successor.
+            Successor.Pay(amountToPay);
+        }
+        else
+        {
+            throw new InvalidOperationException("None of the accounts have enough balance!");
         }
     }
-    
-    public function canPay($amount) : bool {
-        return $this->balance <= $amount;
+
+    protected bool CanPay(float amountRequired) => _balance >= amountRequired;
+}
+
+class Bank : Account
+{
+    public Bank(float balance) : base (balance)
+    {
     }
 }
 
-class Bank extends Account {
-    protected $balance;
-
-    public function __construct(float $balance) {
-        $this->$balance = $balance;
+class Paypal : Account
+{
+    public Paypal(float balance) : base (balance)
+    {
     }
 }
 
-class Paypal extends Account {
-    protected $balance;
-
-    public function __construct(float $balance) {
-        $this->$balance = $balance;
-    }
-}
-
-class Bitcoin extends Account {
-    protected $balance;
-
-    public function __construct(float $balance) {
-        $this->$balance = $balance;
+class Bitcoin : Account
+{
+    public Bitcoin(float balance) : base (balance)
+    {
     }
 }
 ```
-
 Now let's prepare the chain using the links defined above (i.e. Bank, Paypal, Bitcoin)
-
-```php
+```C#
 // Let's prepare a chain like below
-//      $bank->$paypal->$bitcoin
+//      Bank -> Paypal -> Bitcoin
 //
 // First priority bank
 //      If bank can't pay then paypal
 //      If paypal can't pay then bit coin
 
-$bank = new Bank(100);          // Bank with balance 100
-$paypal = new Paypal(200);      // Paypal with balance 200
-$bitcoin = new Bitcoin(300);    // Bitcoin with balance 300
-
-$bank->setNext($paypal);
-$paypal->setNext($bitcoin);
-
+var bank = new Bank(100); // Bank with balance 100
+var paypal = new Paypal(200); // Paypal with balance 200
+var bitcoin = new Bitcoin(300); // Bitcoin with balance 300
+	
+bank.Successor = paypal;
+paypal.Successor = bitcoin;
+	
 // Let's try to pay using the first priority i.e. bank
-$bank->pay(259);
+bank.Pay(259);
 
 // Output will be
 // ==============
-// Cannot pay using bank. Proceeding ..
-// Cannot pay using paypal. Proceeding ..: 
+// Cannot pay using Bank. Proceeding ..
+// Cannot pay using Paypal. Proceeding ..: 
 // Paid 259 using Bitcoin!
 ```
 
