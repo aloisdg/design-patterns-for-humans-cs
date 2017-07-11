@@ -1479,51 +1479,54 @@ Here is the simplest example of a chat room (i.e. mediator) with users (i.e. col
 
 First of all, we have the mediator i.e. the chat room 
 
-```php
+```csharp
 // Mediator
-class ChatRoom implements ChatRoomMediator {
-    public function showMessage(User $user, string $message) {
-        $time = date('M d, y H:i');
-        $sender = $user->getName();
+interface ChatRoomMediator 
+{
+    void ShowMessage(User user, string message);
+}
 
-        echo $time . '[' . $sender . ']:' . $message;
+class ChatRoom : ChatRoomMediator 
+{
+    public void ShowMessage (User user, string message) 
+    {
+        DateTime date = DateTime.Now;
+	var sender = user.Name;
+	Console.WriteLine($"{date: MM MMM , mm:ss} [{sender}] : { message }");  // Using C# 6.0 Interpolated Strings   
     }
 }
 ```
 
 Then we have our users i.e. colleagues
-```php
-class User {
-    protected $name;
-    protected $chatMediator;
+```csharp
+class User 
+{
+    public string Name { get; }
+    public ChatRoomMediator ChatMediator { get; }
 
-    public function __construct(string $name, ChatRoomMediator $chatMediator) {
-        $this->name = $name;
-        $this->chatMediator = $chatMediator;
-    }
-    
-    public function getName() {
-        return $this->name;
-    }
-    
-    public function send($message) {
-        $this->chatMediator->showMessage($this, $message);
+    public User(string name, ChatRoomMediator chatMediator) {
+        this.Name = name;
+        this.ChatMediator = chatMediator;
+    }  
+
+    public void Send(string message) {
+        this.ChatMediator.ShowMessage(this, message);
     }
 }
 ```
 And the usage
-```php
-$mediator = new ChatRoom();
+```csharp
+ChatRoomMediator mediator = new ChatRoom();
 
-$john = new User('John Doe', $mediator);
-$jane = new User('Jane Doe', $mediator);
+User John = new User("John Doe", mediator);
+User Jane = new User("Jane Doe", mediator);
 
-$john->send('Hi there!');
-$jane->send('Hey!');
+John.Send("Hi there!");
+Jane.Send("Hey!");
 
 // Output will be
-// Feb 14, 10:58 [John]: Hi there!
-// Feb 14, 10:58 [Jane]: Hey!
+// 07 Jul , 21:15 [John Doe] : Hi there!
+// 07 Jul , 21:15 [Jane Doe] : Hey!
 ```
 
 💾 Memento
