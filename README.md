@@ -884,7 +884,7 @@ someCoffee = new WhipCoffee(someCoffee);
 Console.WriteLine(someCoffee.Cost()); // 17
 Console.WriteLine(someCoffee.Description()); // Simple Coffee, milk, whip
 
-someCoffee = new VanillaCoffee($someCoffee);
+someCoffee = new VanillaCoffee(someCoffee);
 Console.WriteLine(someCoffee.Cost()); // 20
 Console.WriteLine(someCoffee.Description()); // Simple Coffee, milk, whip, vanilla
 ```
