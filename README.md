@@ -1981,68 +1981,57 @@ Wikipedia says
 Imagine we have a build tool that helps us test, lint, build, generate build reports (i.e. code coverage reports, linting report etc) and deploy our app on the test server.
 
 First of all we have our base class that specifies the skeleton for the build algorithm
-```php
-abstract class Builder {
-    
+```csharp
+abstract class Builder 
+{    
     // Template method 
-    public final function build() {
-        $this->test();
-        $this->lint();
-        $this->assemble();
-        $this->deploy();
+    public void Build() 
+	{
+        this.Test();
+        this.Lint();
+        this.Assemble();
+        this.Deploy();
     }
     
-    public abstract function test();
-    public abstract function lint();
-    public abstract function build();
-    public abstract function deploy();
+    public abstract void Test();
+    public abstract void Lint();
+    public abstract void Assemble();
+    public abstract void Deploy();
 }
 ```
 
 Then we can have our implementations
 
-```php
-class AndroidBuilder extends Builder {
-    public function test() {
-        echo 'Running android tests';
-    }
+```csharp
+
+class AndroidBuilder : Builder 
+{    
+	public override void Test() => Console.WriteLine("Running android tests");
     
-    public function lint() {
-        echo 'Linting the android code';
-    }
+    public override void Lint() => Console.WriteLine("Linting the android code");
     
-    public function assemble() {
-        echo 'Assembling the android build';
-    }
+    public override void Assemble() => Console.WriteLine("Assembling the android build");	
     
-    public function deploy() {
-        echo 'Deploying android build to server';
-    }
+    public override void Deploy() => Console.WriteLine("Deploying android build to server");
 }
 
-class IosBuilder extends Builder {
-    public function test() {
-        echo 'Running ios tests';
-    }
+
+class IosBuilder : Builder 
+{    
+	public override void Test() =>	Console.WriteLine("Running ios tests");
+	
+    public override void Lint() =>	Console.WriteLine("Linting the ios code");
     
-    public function lint() {
-        echo 'Linting the ios code';
-    }
+	public override void Assemble() =>	Console.WriteLine("Assembling the ios build");	
     
-    public function assemble() {
-        echo 'Assembling the ios build';
-    }
-    
-    public function deploy() {
-        echo 'Deploying ios build to server';
-    }
+    public override void Deploy() =>	Console.WriteLine("Deploying ios build to server");	
 }
 ```
 And then it can be used as
 
-```php
-$androidBuilder = new AndroidBuilder();
-$androidBuilder->build();
+```csharp
+var androidBuilder = new AndroidBuilder();
+androidBuilder.Build();
 
 // Output:
 // Running android tests
@@ -2050,8 +2039,8 @@ $androidBuilder->build();
 // Assembling the android build
 // Deploying android build to server
 
-$iosBuilder = new IosBuilder();
-$iosBuilder->build();
+var iosBuilder = new IosBuilder();
+iosBuilder.Build();
 
 // Output:
 // Running ios tests
