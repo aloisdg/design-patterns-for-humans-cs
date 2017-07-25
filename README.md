@@ -1624,66 +1624,62 @@ Wikipedia says
 **Programmatic example**
 
 Translating our example from above. First of all we have job seekers that need to be notified for a job posting
-```php
+```csharp
 class JobPost {
-    protected $title;
+    public string Title { get; set; }
     
-    public function __construct(string $title) {
-        $this->title = $title;
-    }
-    
-    public function getTitle() {
-        return $this->title;
+    public JobPost(string title) {
+        this.Title = title;
     }
 }
 
-class JobSeeker implements Observer {
-    protected $name;
-
-    public function __construct(string $name) {
-        $this->name = $name;
+class JobSeeker : Observer {
+    public string Name { get; set; }
+    
+    public JobSeeker(string name) {
+        this.Name = name;
     }
-
-    public function onJobPosted(JobPost $job) {
+    
+    public void OnJobPosted(JobPost job) {
         // Do something with the job posting
-        echo 'Hi ' . $this->name . '! New job posted: '. $job->getTitle();
+        Console.WriteLine("Hi {0}! New job posted: {1}", this.Name, job.Title);
     }
 }
 ```
 Then we have our job postings to which the job seekers will subscribe
-```php
-class JobPostings implements Observable {
-    protected $observers = [];
+```csharp
+class JobPostings : Observable {
+    protected List<Observer> observers = new List<Observer>();
     
-    protected function notify(JobPost $jobPosting) {
-        foreach ($this->observers as $observer) {
-            $observer->onJobPosted($jobPosting);
+    protected void Notify(JobPost jobPosting) {
+        foreach (var observer in this.observers) {
+            observer.OnJobPosted(jobPosting);
         }
     }
     
-    public function attach(Observer $observer) {
-        $this->observers[] = $observer;
+    public void Attach(Observer observer) {
+        this.observers.Add(observer);
     }
     
-    public function addJob(JobPost $jobPosting) {
-        $this->notify($jobPosting);
+    public void AddJob(JobPost jobPosting) {
+        this.Notify(jobPosting);
     }
 }
 ```
 Then it can be used as
-```php
+```csharp
 // Create subscribers
-$johnDoe = new JobSeeker('John Doe');
-$janeDoe = new JobSeeker('Jane Doe');
-$kaneDoe = new JobSeeker('Kane Doe');
+var johnDoe = new JobSeeker("John Doe");
+var janeDoe = new JobSeeker("Jane Doe");
+var kaneDoe = new JobSeeker("Kane Doe");
 
 // Create publisher and attach subscribers
-$jobPostings = new JobPostings();
-$jobPostings->attach($johnDoe);
-$jobPostings->attach($janeDoe);
+var jobPostings = new JobPostings();
+jobPostings.Attach(johnDoe);
+jobPostings.Attach(janeDoe);
 
 // Add a new job and see if subscribers get notified
-$jobPostings->addJob(new JobPost('Software Engineer'));
+jobPostings.AddJob(new JobPost("Software Engineer"));
 
 // Output
 // Hi John Doe! New job posted: Software Engineer
