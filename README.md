@@ -1822,58 +1822,59 @@ In plain words
 
 Wikipedia says
 > In computer programming, the strategy pattern (also known as the policy pattern) is a behavioural software design pattern that enables an algorithm's behavior to be selected at runtime.
- 
+
 **Programmatic example**
 
 Translating our example from above. First of all we have our strategy interface and different strategy implementations
 
-```php
+```csharp
 interface SortStrategy {
-    public function sort(array $dataset) : array; 
+    List<int> Sort(List<int> data) ;
 }
 
-class BubbleSortStrategy implements SortStrategy {
-    public function sort(array $dataset) : array {
-        echo "Sorting using bubble sort";
-         
-        // Do sorting
-        return $dataset;
-    }
-} 
+class BubbleSortStrategy : SortStrategy {
+    public List<int> Sort(List<int> data) {
+        Console.WriteLine("Sorting using bubble sort");
 
-class QuickSortStrategy implements SortStrategy {
-    public function sort(array $dataset) : array {
-        echo "Sorting using quick sort";
-        
         // Do sorting
-        return $dataset;
+        return data;
+    }
+}
+
+class QuickSortStrategy : SortStrategy {
+    public List<int> Sort(List<int> data) {
+        Console.WriteLine("Sorting using quick sort");
+
+        // Do sorting
+        return data;
     }
 }
 ```
- 
+
 And then we have our client that is going to use any strategy
-```php
+
+```csharp
 class Sorter {
-    protected $sorter;
-    
-    public function __construct(SortStrategy $sorter) {
-        $this->sorter = $sorter;
+    protected SortStrategy sortingTechnique;
+
+    public Sorter(SortStrategy sortingTechnique) {
+        this.sortingTechnique = sortingTechnique ;
     }
-    
-    public function sort(array $dataset) : array {
-        return $this->sorter->sort($dataset);
+
+    public List<int> Sort(List<int> dataSet) {
+        return this.sortingTechnique.Sort(dataSet);
     }
 }
 ```
 And it can be used as
-```php
-$dataset = [1, 5, 4, 3, 2, 8];
+```csharp
+var dataSet = new List<int> { 1, 5, 4, 3, 2, 8 };
 
-$sorter = new Sorter(new BubbleSortStrategy());
-$sorter->sort($dataset); // Output : Sorting using bubble sort
+var bubbleSorter = new Sorter(new BubbleSortStrategy());
+sorter.Sort(dataSet); // Output : Sorting using bubble sort
 
-$sorter = new Sorter(new QuickSortStrategy());
-$sorter->sort($dataset); // Output : Sorting using quick sort
+var quickSorter = new Sorter(new QuickSortStrategy());
+sorter.Sort(dataSet); // Output : Sorting using quick sort
 ```
 
 💢 State
