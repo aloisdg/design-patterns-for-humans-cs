@@ -1633,6 +1633,10 @@ class JobPost {
     }
 }
 
+interface Observer {
+    void OnJobPosted(JobPost job);
+}
+
 class JobSeeker : Observer {
     public string Name { get; set; }
     
@@ -1648,6 +1652,11 @@ class JobSeeker : Observer {
 ```
 Then we have our job postings to which the job seekers will subscribe
 ```csharp
+interface Observable {
+    void Attach(Observer observer);
+    void AddJob(JobPost jobPosting;
+}
+
 class JobPostings : Observable {
     protected List<Observer> observers = new List<Observer>();
     
